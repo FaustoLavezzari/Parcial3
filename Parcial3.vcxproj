@@ -139,7 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Estrcuturas.cpp" />
     <ClCompile Include="Parcial3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Estrcuturas.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Mapa.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
