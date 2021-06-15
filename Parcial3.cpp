@@ -4,23 +4,27 @@
 #include "Estrcuturas.h"
 #include <fstream>
 #include <sstream>
+#include <vector>
 using namespace std;
 
 void cargarMapa(int mapa[N][M]);
 void imprimir(int mapa[N][M]);
 void encontrarBarreras(int mapa[N][M], queue<Barrera> &barreras);
-void encontrarMalezas(int mapa[N][M], queue<coordenada> &malezas);
+bool hayInterseccion(coordenada A1, coordenada B1, coordenada A2, coordenada B2);
+float calcularArista(coordenada pt1, coordenada pt2);
+
 int main() {
-	queue<Barrera> barreras; 
+	vector<vector<Arista>> matrizAdyacencia;
+	queue<Barrera> barreras;
+	queue<coordenada> malezas;
 	int mapa[N][M];
+
 	cargarMapa(mapa);
 	encontrarBarreras(mapa, barreras);
 	Filtro filtro;
-	filtro.impre();
-	cout<<"-----------------------------------" << endl;
-	filtro.desplazar();
-	return 0;
+	malezas = filtro.buscarMaleza(mapa);
 
+	return 0;
 }
 
 void cargarMapa(int mapa[N][M]) {
@@ -99,8 +103,26 @@ void imprimir(int mapa[N][M]) {
 		cout << endl;
 	}
 }
-void encontrarMalezas(int mapa[N][M], queue<coordenada>& malezas){
-	Filtro	matrizFiltro;
 
+bool hayInterseccion(coordenada A1, coordenada B1, coordenada A2, coordenada B2) {
+	int dx1 = B1.x - A1.x;
+	int dy1 = B1.y - A1.y;
+	int dx2 = B2.x - A2.x;
+	int dy2 = B2.y - A2.y;
+	int vp = dx1 * dy2 - dx2 * dy1;
+	int vx = A2.x - A1.x;
+	int vy = A2.y - A1.y;
+	int k1 = (vx * dy2 - vy * dx2) / vp;
+	int k2 = (vx * dy1 - vy * dx1) / vp;
+	if (vp == 0 || (k1 > 1 || k1 < 0) || (k2 > 1 || k2 < 0)) {
+		return 0;
+	}
+	else return 1;
+}
 
+float calcularArista(coordenada pt1, coordenada pt2) {
+	int A=pt1.x - pt2.x;
+	int B = pt1.y - pt2.y;
+	float C = sqrt((A * A) + (B * B));
+	return C;
 }
