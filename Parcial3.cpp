@@ -1,23 +1,26 @@
 #include <iostream>
+#include "Bitset.h"
 #include <queue>
 #include "Estrcuturas.h"
 #include <fstream>
 #include <sstream>
-#define N 30
-#define M 30
 using namespace std;
 
 void cargarMapa(int mapa[N][M]);
 void imprimir(int mapa[N][M]);
 void encontrarBarreras(int mapa[N][M], queue<Barrera> &barreras);
-
+void encontrarMalezas(int mapa[N][M], queue<coordenada> &malezas);
 int main() {
 	queue<Barrera> barreras; 
 	int mapa[N][M];
 	cargarMapa(mapa);
 	encontrarBarreras(mapa, barreras);
-	imprimir(mapa);
+	Filtro filtro;
+	filtro.impre();
+	cout<<"-----------------------------------" << endl;
+	filtro.desplazar();
 	return 0;
+
 }
 
 void cargarMapa(int mapa[N][M]) {
@@ -95,4 +98,9 @@ void imprimir(int mapa[N][M]) {
 		}
 		cout << endl;
 	}
+}
+void encontrarMalezas(int mapa[N][M], queue<coordenada>& malezas){
+	Filtro	matrizFiltro;
+
+
 }

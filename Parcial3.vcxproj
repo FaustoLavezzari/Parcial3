@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bitset.cpp" />
     <ClCompile Include="Estrcuturas.cpp" />
     <ClCompile Include="Parcial3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bitset.h" />
     <ClInclude Include="Estrcuturas.h" />
   </ItemGroup>
   <ItemGroup>

@@ -21,9 +21,15 @@
     <ClCompile Include="Estrcuturas.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Bitset.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Estrcuturas.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitset.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
