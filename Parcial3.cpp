@@ -5,25 +5,35 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#define  INF 999999
 using namespace std;
-
 void cargarMapa(int mapa[N][M]);
 void imprimir(int mapa[N][M]);
 void encontrarBarreras(int mapa[N][M], queue<Barrera> &barreras);
 bool hayInterseccion(coordenada A1, coordenada B1, coordenada A2, coordenada B2);
 float calcularArista(coordenada pt1, coordenada pt2);
+vector<coordenada> cargarMalezas( queue<coordenada> cola);
+void armarMatrizAdyacencia(vector<Barrera>& muros, vector<coordenada>& malezas, vector<vector<double>>& grafo);
+vector<Barrera> cargarBarreras(queue<Barrera> cola);
+
 
 int main() {
-	vector<vector<Arista>> matrizAdyacencia;
+	vector<vector<double>> matrizAdyacencia ;
+	vector<coordenada> coordenadasMalezas;
+	vector<Barrera> barrerasVector;
 	queue<Barrera> barreras;
 	queue<coordenada> malezas;
 	int mapa[N][M];
-
+	
 	cargarMapa(mapa);
 	encontrarBarreras(mapa, barreras);
 	Filtro filtro;
 	malezas = filtro.buscarMaleza(mapa);
+	coordenadasMalezas = cargarMalezas(malezas);
+	barrerasVector = cargarBarreras(barreras);
+	armarMatrizAdyacencia(barrerasVector,coordenadasMalezas,matrizAdyacencia);
 
+	
 	return 0;
 }
 
@@ -105,24 +115,77 @@ void imprimir(int mapa[N][M]) {
 }
 
 bool hayInterseccion(coordenada A1, coordenada B1, coordenada A2, coordenada B2) {
-	int dx1 = B1.x - A1.x;
-	int dy1 = B1.y - A1.y;
-	int dx2 = B2.x - A2.x;
-	int dy2 = B2.y - A2.y;
+	int dx1 = B1.x - A1.x ;
+	int dy1 = B1.y - A1.y ;
+	int dx2 = B2.x - A2.x ;
+	int dy2 = B2.y - A2.y ;
 	int vp = dx1 * dy2 - dx2 * dy1;
-	int vx = A2.x - A1.x;
-	int vy = A2.y - A1.y;
-	int k1 = (vx * dy2 - vy * dx2) / vp;
-	int k2 = (vx * dy1 - vy * dx1) / vp;
-	if (vp == 0 || (k1 > 1 || k1 < 0) || (k2 > 1 || k2 < 0)) {
+	if (vp == 0 ) {
 		return 0;
 	}
-	else return 1;
+	else{
+		int vx = A2.x - A1.x;
+		int vy = A2.y - A1.y;
+		int k1 = (vx * dy2 - vy * dx2) / vp;
+		int k2 = (vx * dy1 - vy * dx1) / vp;
+		if ((k1 > 1 || k1 < 0) || (k2 > 1 || k2 < 0)) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+
+	}
 }
 
 float calcularArista(coordenada pt1, coordenada pt2) {
 	int A=pt1.x - pt2.x;
 	int B = pt1.y - pt2.y;
-	float C = sqrt((A * A) + (B * B));
+	double C = sqrt((A * A) + (B * B));
 	return C;
+}
+
+vector<coordenada> cargarMalezas(queue<coordenada> cola) {
+	queue<coordenada> colaAux = cola;
+	vector<coordenada> vector1;
+	for (int i = 0; !colaAux.empty(); i++) {
+		vector1.push_back(colaAux.front());
+		colaAux.pop();
+	}
+	return vector1;
+}
+
+vector<Barrera> cargarBarreras(queue<Barrera> cola) {
+	queue<Barrera> colaAux = cola;
+	vector<Barrera> vector1;
+	for (int i = 0; !colaAux.empty(); i++) {
+		vector1.push_back(colaAux.front());
+		colaAux.pop();
+	}
+	return vector1;
+}
+
+void armarMatrizAdyacencia(vector<Barrera>& muros, vector<coordenada>& malezas, vector<vector<double>>& grafo) {
+	grafo.resize(malezas.size());
+	for (int i = 0; i < malezas.size(); i++) {
+		grafo[i].resize(malezas.size());
+	}
+	for (int i = 0; i < malezas.size(); i++) {
+		coordenada pos_Aux = malezas[i];
+		for (int j = 0; j < malezas.size(); j++) {
+			coordenada pos_Aux2 = malezas[j];
+			bool bandera = true;
+			for (int m = 0; m < muros.size(); m++) {
+				Barrera m_aux = muros[m];
+
+				if (hayInterseccion(pos_Aux, pos_Aux2, m_aux.comienzo , m_aux.final) || i==j) {
+					grafo[i][j] = INF;
+					bandera = false;
+				}
+			}
+			if (bandera) {
+				grafo[i][j] = calcularArista(pos_Aux, pos_Aux2);
+			}
+		}
+	}
 }
