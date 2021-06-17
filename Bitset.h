@@ -4,8 +4,8 @@
 #include <iostream>
 #include <bitset>
 #include <queue>
-#define N 30
-#define M 30
+#define N 99
+#define M 99
 
 using namespace std;
 

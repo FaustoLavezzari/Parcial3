@@ -2,6 +2,7 @@
 #include "Bitset.h"
 #include <queue>
 #include "Estrcuturas.h"
+#include "Hamiltoniano.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -17,6 +18,10 @@ float calcularArista(coordenada pt1, coordenada pt2);
 vector<coordenada> cargarMalezas( queue<coordenada> cola);
 void armarMatrizAdyacencia(vector<Barrera>& muros, vector<coordenada>& malezas, vector<vector<double>>& grafo);
 vector<Barrera> cargarBarreras(queue<Barrera> cola);
+Nodo* encontrarHamiltoniano(vector<vector<double>> matrizAdyacencia);
+bool perteneceALosPadres(Nodo* nodo, int num);
+int cuantosPadresTengo(Nodo* hijo, int contador);
+void imprimirRecorrido(Nodo* final);
 
 
 int main() {
@@ -34,8 +39,10 @@ int main() {
 	coordenadasMalezas = cargarMalezas(malezas);
 	barrerasVector = cargarBarreras(barreras);
 	armarMatrizAdyacencia(barrerasVector,coordenadasMalezas,matrizAdyacencia);
-
-	
+	Nodo* final = encontrarHamiltoniano(matrizAdyacencia);
+	imprimirRecorrido(final);
+	cout << "El dron recorrio: " << final->getDistancia() << " metros" << endl;
+   
 	return 0;
 }
 
@@ -210,5 +217,72 @@ void armarMatrizAdyacencia(vector<Barrera>& muros, vector<coordenada>& malezas, 
 				grafo[i][j] = calcularArista(pos_Aux, pos_Aux2);
 			}
 		}
+	}
+
+}
+
+Nodo* encontrarHamiltoniano(vector<vector<double>> matrizAdyacencia) {
+	queue<Nodo*> cola;
+	vector<Nodo*> Finalizados;
+	Nodo* siguiente = new Nodo(NULL, 0, 0);
+	cola.emplace(siguiente);
+	int contador = 0;
+	while (!cola.empty())
+	{
+		bool fin = true;
+		siguiente = cola.front();
+		cola.pop();
+		for (int j = 0; j < matrizAdyacencia.size(); j++) {
+			if (matrizAdyacencia[siguiente->getNumVertice()][j] != INF && !(perteneceALosPadres(siguiente, j))) {
+				Nodo* hijo = new Nodo(siguiente, j, matrizAdyacencia[siguiente->getNumVertice()][j]);
+					cola.emplace(hijo);
+					fin = false;
+			}
+		}
+		if (fin && cuantosPadresTengo(siguiente,contador) == (matrizAdyacencia.size()-1) && matrizAdyacencia[siguiente->getNumVertice()][0] != INF) {
+			Nodo* inicio = new Nodo(siguiente, 0, matrizAdyacencia[siguiente->getNumVertice()][0]);
+			Finalizados.push_back(inicio);
+		}
+	}
+	Nodo* aux = new Nodo (NULL,0,0);
+	for(int i = 0; i < Finalizados.size(); i++) {
+		for (int j = i + 1; j < Finalizados.size(); j++) {
+			if (Finalizados[i]->getDistancia() > Finalizados[j]->getDistancia()) {
+				aux = Finalizados[i];
+				Finalizados[i] = Finalizados[j];
+				Finalizados[j] = aux;
+			}
+		}
+	}
+	return Finalizados[0];
+}
+
+bool perteneceALosPadres(Nodo * nodo, int num) {										//Filtro recursivo, para saber si el numero que le ingreso, pertenece a alguno de los padres o padres de los padres
+	if (nodo->getPadre() == NULL) {
+		return false;
+	}
+	if (nodo->getPadre()->getNumVertice() == num) {
+		return true;
+	}
+	else {
+		return perteneceALosPadres(nodo->getPadre(), num);
+	}
+}
+
+int cuantosPadresTengo(Nodo* nodo , int contador) {
+	
+	if (nodo->getPadre() == NULL) {
+		return contador;
+	}
+	else {
+		contador++;
+		return cuantosPadresTengo(nodo->getPadre(), contador);
+	}
+}
+
+void imprimirRecorrido(Nodo* nodo) {
+	if (nodo->getPadre() != NULL) {
+		cout << "Voy desde la maleza "<<nodo->getNumVertice()<<" hacia la maleza "<<nodo->getPadre()->getNumVertice()<<endl;
+		imprimirRecorrido(nodo->getPadre());
 	}
 }
