@@ -29,6 +29,10 @@ public:
     
 	queue<coordenada> buscarMaleza(int mapa[N][M]) {
 		queue<coordenada> malezas;
+		coordenada comienzo;
+		comienzo.x = 0;
+		comienzo.y = 0;
+		malezas.emplace(comienzo);
 		for (int i = 0; i <= N-3; i++) {
 			for (int j = M - 1; j >= 3; j--) {
 				if (chequearMaleza(mapa)){

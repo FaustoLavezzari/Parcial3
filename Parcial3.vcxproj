@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClCompile Include="Bitset.cpp" />
     <ClCompile Include="Estrcuturas.cpp" />
+    <ClCompile Include="Hamiltoniano.cpp" />
     <ClCompile Include="Parcial3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitset.h" />
     <ClInclude Include="Estrcuturas.h" />
+    <ClInclude Include="Hamiltoniano.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Mapa.txt" />
