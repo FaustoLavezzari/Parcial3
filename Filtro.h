@@ -11,10 +11,7 @@ using namespace std;
 
 class Filtro {
 private:
-bool chequearMaleza(int mapa[N][M]) {
-		Filtro aux = *this&mapa;
-		return aux == *this;
-	}
+
 void borrar(coordenada posicion, int matriz[N][M]) {
 	for (int i = posicion.y - 1; i <= posicion.y + 1; i++) {
 		for (int j = posicion.x - 1; j <= posicion.x + 1; j++) {
@@ -49,6 +46,11 @@ public:
 			}
 		}
 		return malezas;
+	}
+
+	bool chequearMaleza(int mapa[N][M]) {
+		Filtro aux = *this & mapa;
+		return aux == *this;
 	}
 
 	void impre() {

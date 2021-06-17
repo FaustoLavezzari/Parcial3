@@ -1,15 +1,15 @@
 #include <iostream>
-#include "Bitset.h"
+#include "Filtro.h"
 #include <queue>
 #include "Estrcuturas.h"
-#include "Hamiltoniano.h"
+#include "Nodo.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
 #define  INF 999999
 using namespace std;
+
 void cargarMapa(int mapa[N][M]);
-void imprimir(int mapa[N][M]);
 void encontrarBarreras(int mapa[N][M], queue<Barrera> &barreras);
 bool hayInterseccion(coordenada A1, coordenada B1, coordenada A2, coordenada B2);
 int orientation(coordenada p, coordenada q, coordenada r);
@@ -111,15 +111,6 @@ void encontrarBarreras(int mapa[N][M], queue<Barrera> &barreras) {
 				barreras.emplace(barrera);
 			}
 		}
-	}
-}
-
-void imprimir(int mapa[N][M]) {
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
-			cout << mapa[i][j];
-		}
-		cout << endl;
 	}
 }
 
